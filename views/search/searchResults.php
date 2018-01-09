@@ -6,7 +6,7 @@ for($i = 0; $i < sizeof($booklist); $i++)
 {
   echo "<div class='result'>
           Title: ".$booklist[$i]->title."<br>
-          ISBN: ".$booklist[$i]->ISBN."<br>
+          
           Author(s): ";
           foreach($booklist[$i]->authors as $a)
           {
