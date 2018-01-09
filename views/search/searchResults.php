@@ -4,6 +4,7 @@ echo "Searching $searchBy's for '$string' yielded ".sizeof($booklist)." results.
 echo "<div class='resultsContainer'>";
 for($i = 0; $i < sizeof($booklist); $i++)
 {
+  echo $booklist[$i];
   echo "<div class='result'>
           Title: ".$booklist[$i]->title."<br>
           ISBN: ".$booklist[$i]->ISBN."<br>
