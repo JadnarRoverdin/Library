@@ -40,6 +40,60 @@ Class Book {
     return array($errorCode, $message);
  }
  //===================================================================================
+  public static function all()
+  {
+     $errorCode;
+     $message;
+     $db = Db::getInstance();
+     $sql = "SELECT * FROM book";
+     $booklist = array();
+     try
+     {
+       $stmt = $db->prepare($sql);
+       $stmt->execute();
+       while($r = $stmt->fetch(PDO::FETCH_ASSOC))		//goes through list
+       {
+         $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber']);
+       }
+       $errorCode  = 1;
+       $message    = $booklist;
+     }
+     catch(PDOException $e)
+     {
+       $errorCode  = $e->getCode();
+       $message    = $e->getMessage();
+     }
+     return array($errorCode, $message);
+  }
+  //===================================================================================
+   public static function byLetter($a)
+   {
+      $errorCode;
+      $message;
+      $db = Db::getInstance();
+      $sql = "SELECT * FROM book WHERE title LIKE ?";
+      $booklist = array();
+      $data = array($a."%");
+      // $alpha = array('0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+      try
+      {
+        $stmt = $db->prepare($sql);
+        $stmt->execute($data);
+        while($r = $stmt->fetch(PDO::FETCH_ASSOC))		//goes through list
+        {
+          $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber']);
+        }
+        $errorCode  = 1;
+        $message    = $booklist;
+      }
+      catch(PDOException $e)
+      {
+        $errorCode  = $e->getCode();
+        $message    = $e->getMessage();
+      }
+      return array($errorCode, $message);
+   }
+ //===================================================================================
   public static function searchByTitle($searchString)
   {
      $errorCode;
@@ -163,7 +217,7 @@ Class Book {
        $stmt->execute($data);
        while($r = $stmt->fetch(PDO::FETCH_ASSOC))		//goes through list
        {
-         $booklist[] = new Author($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber']);
+         $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber']);
        }
        $errorCode  = 1;
        $message    = $booklist;
@@ -190,7 +244,7 @@ Class Book {
         $stmt->execute($data);
         while($r = $stmt->fetch(PDO::FETCH_ASSOC))		//goes through list
         {
-          $booklist[] = new Author($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber']);
+          $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber']);;
         }
         $errorCode  = 1;
         $message    = $booklist;

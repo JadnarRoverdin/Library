@@ -1,5 +1,5 @@
-<header class="container-fluid">
-  <a href='index.php'><h1>Library</h1></a>
+<header>
+  <a href='index.php' class='title' >Library</a>
 </header>
 
   <body>

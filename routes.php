@@ -19,13 +19,17 @@
       case 'search':
         $controller = new SearchController();
         break;
+      case 'browse':
+        $controller = new BrowseController();
+        break;
     }
     $controller->{$action}();
   }
 
   $controllers = array (  'pages'     => ['home', 'index'],
                           'admin'     => ['addBook', 'addAuthor'],
-                          'search'    => ['search']);
+                          'search'    => ['search'],
+                          'browse'    => ['browse','browseByAuthor', 'browseBySeries']);
 
   if(array_key_exists($controller, $controllers))
     if(in_array($action, $controllers[$controller]))

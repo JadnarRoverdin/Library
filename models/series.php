@@ -33,6 +33,33 @@ Class Series {
       }
       return array($errorCode, $message);
    }
+   //===================================================================================
+    public static function byLetter($a)
+    {
+       $errorCode;
+       $message;
+       $db = Db::getInstance();
+       $sql = "SELECT * FROM series WHERE name LIKE ? ORDER BY name";
+       $list = array();
+       $data = array($a."%");
+       try
+       {
+         $stmt = $db->prepare($sql);
+         $stmt->execute($data);
+         while($r = $stmt->fetch(PDO::FETCH_ASSOC))		//goes through list
+         {
+           $list[] =  new Series($r['seriesID'],$r['name']);
+         }
+         $errorCode  = 1;
+         $message    = $list;
+       }
+       catch(PDOException $e)
+       {
+         $errorCode  = $e->getCode();
+         $message    = $e->getMessage();
+       }
+       return array($errorCode, $message);
+    }
 //=================================================================================== CREATE
   public static function create($name)
   {
@@ -78,12 +105,9 @@ Class Series {
      {
        $stmt = $db->prepare($sql);
        $stmt->execute($data);
-       while($r = $stmt->fetch(PDO::FETCH_ASSOC))		//goes through list
-       {
-         $serieslist[] = new Series($r['seriesID'],$r['name']);
-       }
+       $r = $stmt->fetch(PDO::FETCH_ASSOC);
        $errorCode  = 1;
-       $message    = $serieslist;
+       $message    = new Series($r['seriesID'],$r['name']);
      }
      catch(PDOException $e)
      {

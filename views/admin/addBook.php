@@ -1,5 +1,6 @@
 <script src="js/bookAdderManager.js"></script>
 <h2>Add a Book</h2>
+<div><?php echo $message; ?></div>
 <form method='post' action='?controller=admin&action=addBook'>
   <h3>Book</h3>
 

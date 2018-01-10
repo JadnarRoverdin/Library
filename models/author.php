@@ -44,6 +44,56 @@ Class Author {
     }
     return array($errorCode, $message);
  }
+ //===================================================================================
+  public static function id($id)
+  {
+     $errorCode;
+     $message;
+     $db = Db::getInstance();
+     $sql = "SELECT * FROM author WHERE authorID = ?";
+     $data = array($id);
+     try
+     {
+       $stmt = $db->prepare($sql);
+       $stmt->execute($data);
+       $r = $stmt->fetch(PDO::FETCH_ASSOC);
+       $errorCode  = 1;
+       $message    = new Author($r['authorID'],$r['firstName'],$r['middleName'],$r['lastName']);;
+     }
+     catch(PDOException $e)
+     {
+       $errorCode  = $e->getCode();
+       $message    = $e->getMessage();
+     }
+     return array($errorCode, $message);
+  }
+ //===================================================================================
+  public static function byLetter($a)
+  {
+     $errorCode;
+     $message;
+     $db = Db::getInstance();
+     $sql = "SELECT * FROM author WHERE lastName LIKE ? ORDER BY lastName";
+     $list = array();
+     $data = array($a."%");
+     try
+     {
+       $stmt = $db->prepare($sql);
+       $stmt->execute($data);
+       while($r = $stmt->fetch(PDO::FETCH_ASSOC))		//goes through list
+       {
+         $list[] = new Author($r['authorID'],$r['firstName'],$r['middleName'],$r['lastName']);
+       }
+       $errorCode  = 1;
+       $message    = $list;
+     }
+     catch(PDOException $e)
+     {
+       $errorCode  = $e->getCode();
+       $message    = $e->getMessage();
+     }
+     return array($errorCode, $message);
+  }
 //===================================================================================
  public static function getByBookId($bookID)
  {

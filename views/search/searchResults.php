@@ -5,8 +5,8 @@ echo "<div class='resultsContainer'>";
 for($i = 0; $i < sizeof($booklist); $i++)
 {
   echo "<div class='result'>
-          Title: ".$booklist[$i]->title."<br>
-          
+          <strong>".$booklist[$i]->title."</strong><br>
+
           Author(s): ";
           foreach($booklist[$i]->authors as $a)
           {
