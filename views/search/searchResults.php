@@ -10,7 +10,7 @@ for($i = 0; $i < sizeof($booklist); $i++)
           Author(s): ";
           foreach($booklist[$i]->authors as $a)
           {
-            echo $a->firstName." ".$a->middleName." ".$a->lastName.",";
+            echo $a->name.",";
           }
           if($booklist[$i]->bookNumber > 0)
             echo "<br>Book ".$booklist[$i]->bookNumber." of ".$booklist[$i]->series->name;
