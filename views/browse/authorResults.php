@@ -23,7 +23,7 @@ if(isset($listSize) && $listSize > 0)
     for($i = 0; $i < sizeof($list); $i++)
     {
       echo "<div class='result'>";
-      echo "<a href='?controller=browse&action=browseByAuthor&id=".$list[$i]->id."'>".$list[$i]->lastName.", ".$list[$i]->firstName." ".$list[$i]->middleName."</a>";
+      echo "<a href='?controller=browse&action=browseByAuthor&id=".$list[$i]->id."'>".$list[$i]->name."</a>";
       echo "</div>";
     }
 

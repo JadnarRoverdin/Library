@@ -1,23 +1,20 @@
 <?php
 Class Author {
   public $id;
-  public $firstName;
-  public $middleName;
-  public $lastName;
+  public $name;
+
 //=================================================================================== STRUCT
-  public function __construct($idin, $firstNamein, $middleNamein, $lastNamein)
+  public function __construct($idin, $namein)
   {
-    $this->id           = $idin;
-    $this->firstName    = $firstNamein;
-    $this->middleName   = $middleNamein;
-    $this->lastName     = $lastNamein;
+    $this->id      = $idin;
+    $this->name    = $namein;
   }
 //=================================================================================== CREATE
-  public static function create($firstName, $middleName, $lastName)
+  public static function create($name)
   {
     $errorCode;
     $message;
-    $check = Author::checkIfExists($firstName, $middleName, $lastName)[1];
+    $check = Author::checkIfExists($name)[1];
     if($check > -1)
     {
       $message = $check;
@@ -26,8 +23,8 @@ Class Author {
     else
     {
       $db = Db::getInstance();
-      $sql = "INSERT INTO author (firstName, middleName, lastName) VALUES (?,?,?)";
-      $data = array($firstName, $middleName, $lastName);
+      $sql = "INSERT INTO author (name) VALUES (?)";
+      $data = array($name);
       try
       {
         $stmt = $db->prepare($sql);
@@ -45,6 +42,32 @@ Class Author {
     return array($errorCode, $message);
  }
  //===================================================================================
+  public static function all()
+  {
+     $errorCode;
+     $message;
+     $db = Db::getInstance();
+     $sql = "SELECT * FROM author";
+     $authorlist = array();
+     try
+     {
+       $stmt = $db->prepare($sql);
+       $stmt->execute();
+       while($r = $stmt->fetch(PDO::FETCH_ASSOC))		//goes through list
+       {
+         $authorlist[] = new Author($r['authorID'],$r['name']);
+       }
+       $errorCode  = 1;
+       $message    = $authorlist;
+     }
+     catch(PDOException $e)
+     {
+       $errorCode  = $e->getCode();
+       $message    = $e->getMessage();
+     }
+     return array($errorCode, $message);
+  }
+ //===================================================================================
   public static function id($id)
   {
      $errorCode;
@@ -58,7 +81,7 @@ Class Author {
        $stmt->execute($data);
        $r = $stmt->fetch(PDO::FETCH_ASSOC);
        $errorCode  = 1;
-       $message    = new Author($r['authorID'],$r['firstName'],$r['middleName'],$r['lastName']);;
+       $message    = new Author($r['authorID'],$r['name']);
      }
      catch(PDOException $e)
      {
@@ -73,16 +96,16 @@ Class Author {
      $errorCode;
      $message;
      $db = Db::getInstance();
-     $sql = "SELECT * FROM author WHERE lastName LIKE ? ORDER BY lastName";
+     $sql = "SELECT * FROM author WHERE name LIKE ? ORDER BY name";
      $list = array();
-     $data = array($a."%");
+     $data = array("%".$a."%");
      try
      {
        $stmt = $db->prepare($sql);
        $stmt->execute($data);
        while($r = $stmt->fetch(PDO::FETCH_ASSOC))		//goes through list
        {
-         $list[] = new Author($r['authorID'],$r['firstName'],$r['middleName'],$r['lastName']);
+         $list[] = new Author($r['authorID'],$r['name']);
        }
        $errorCode  = 1;
        $message    = $list;
@@ -110,7 +133,7 @@ Class Author {
       $stmt->execute($data);
       while($r = $stmt->fetch(PDO::FETCH_ASSOC))		//goes through list
       {
-        $authorlist[] = new Author($r['authorID'],$r['firstName'],$r['middleName'],$r['lastName']);
+        $authorlist[] = new Author($r['authorID'],$r['name']);
       }
       $errorCode  = 1;
       $message    = $authorlist;
@@ -123,14 +146,14 @@ Class Author {
     return array($errorCode, $message);
  }
  //===================================================================================
-  public static function checkIfExists($firstName, $middleName, $lastName)
+  public static function checkIfExists($name)
   {
 
      $errorCode;
      $message;
      $db = Db::getInstance();
-     $sql = "SELECT authorID FROM author WHERE UPPER(firstName) = UPPER(?) AND UPPER(middleName) = UPPER(?) AND UPPER(lastName) = UPPER(?)";
-     $data = array($firstName, $middleName, $lastName);
+     $sql = "SELECT authorID FROM author WHERE UPPER(name) = UPPER(?)";
+     $data = array($name);
      $authorlist = array();
      try
      {

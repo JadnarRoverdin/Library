@@ -23,5 +23,6 @@
   <div>
     <h2>Administrate</h2>
     <p><a href='?controller=admin&action=addBook'>Add Book</a></p>
+    <p><a href='?controller=admin&action=autoadder'>Auto Adder</a></p>
   </div>
 </div>

@@ -9,9 +9,7 @@
   <h3>Author</h3>
   Number of Authors: <input type='number' id = 'numOfAuthor' value='1' oninput='changenumofAuthor(event)'>
   <div id='authorNames'>
-  <input type='text' placeholder='First Name'   name='firstName[]'>
-  <input type='text' placeholder='Middle Name'  name='middleName[]'>
-  <input type='text' placeholder='Last Name'    name='lastName[]'><br>
+  <input type='text' placeholder='Last, First M.I.'   name='name[]'>
   </div>
   <h3>Series</h3>
   Part of a series?<br>

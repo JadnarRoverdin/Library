@@ -36,7 +36,7 @@ if(isset($listSize) && $listSize > 0)
               Author(s): ";
               foreach($list[$i]->authors as $a)
               {
-                echo $a->firstName." ".$a->middleName." ".$a->lastName.",";
+                echo $a->name;
               }
               if($list[$i]->bookNumber > 0)
                 echo "<br>Book ".$list[$i]->bookNumber." of ".$list[$i]->series->name;

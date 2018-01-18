@@ -6,8 +6,9 @@ Class Book {
   public $authors;
   public $bookNumber;
   public $series;
+  public $wishlist;
 //=================================================================================== STRUCT
-  public function __construct($idin, $titlein, $ISBNin, $bookNumberin)
+  public function __construct($idin, $titlein, $ISBNin, $bookNumberin, $wishlistin)
   {
     $this->id           = $idin;
     $this->title        = $titlein;
@@ -15,27 +16,37 @@ Class Book {
     $this->bookNumber   = $bookNumberin;
     $this->authors      = Author::getByBookId($idin)[1];
     $this->series       = Series::byBookId($idin)[1];
+    $this->wishlist    = $wishlistin;
   }
 //=================================================================================== CREATE
-  public static function create($title, $ISBN, $bookNumber)
+  public static function create($title, $ISBN, $bookNumber, $wishlist)
   {
     $errorCode;
     $message;
-    $db = Db::getInstance();
-    $sql = "INSERT INTO book (title, ISBN, bookNumber) VALUES (?,?,?)";
-    $data = array($title, $ISBN, $bookNumber);
-    try
+    $check = Book::checkIfExists($title)[1];
+    if($check > -1)
     {
-      $stmt = $db->prepare($sql);
-      $stmt->execute($data);
-      $lastID = $db->lastInsertId();
+      $message = $check;
       $errorCode = 1;
-      $message = $lastID;
     }
-    catch(PDOException $e)
+    else
     {
-      $errorCode  = $e-> getCode();
-      $message    = $e->getMessage();
+      $db = Db::getInstance();
+      $sql = "INSERT INTO book (title, ISBN, bookNumber, wishlist) VALUES (?,?,?,?)";
+      $data = array($title, $ISBN, $bookNumber, $wishlist);
+      try
+      {
+        $stmt = $db->prepare($sql);
+        $stmt->execute($data);
+        $lastID = $db->lastInsertId();
+        $errorCode = 1;
+        $message = $lastID;
+      }
+      catch(PDOException $e)
+      {
+        $errorCode  = $e-> getCode();
+        $message    = $e->getMessage();
+      }
     }
     return array($errorCode, $message);
  }
@@ -53,7 +64,7 @@ Class Book {
        $stmt->execute();
        while($r = $stmt->fetch(PDO::FETCH_ASSOC))		//goes through list
        {
-         $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber']);
+         $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber'],$r['wishlist']);
        }
        $errorCode  = 1;
        $message    = $booklist;
@@ -81,7 +92,7 @@ Class Book {
         $stmt->execute($data);
         while($r = $stmt->fetch(PDO::FETCH_ASSOC))		//goes through list
         {
-          $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber']);
+          $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber'],$r['wishlist']);
         }
         $errorCode  = 1;
         $message    = $booklist;
@@ -108,7 +119,7 @@ Class Book {
        $stmt->execute($data);
        while($r = $stmt->fetch(PDO::FETCH_ASSOC))		//goes through list
        {
-         $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber']);
+         $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber'],$r['wishlist']);
        }
        $errorCode  = 1;
        $message    = $booklist;
@@ -135,7 +146,7 @@ Class Book {
         $stmt->execute($data);
         while($r = $stmt->fetch(PDO::FETCH_ASSOC))		//goes through list
         {
-          $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber']);
+          $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber'],$r['wishlist']);
         }
         $errorCode  = 1;
         $message    = $booklist;
@@ -162,7 +173,7 @@ Class Book {
         $stmt->execute($data);
         while($r = $stmt->fetch(PDO::FETCH_ASSOC))		//goes through list
         {
-          $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber']);
+          $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber'],$r['wishlist']);
         }
         $errorCode  = 1;
         $message    = $booklist;
@@ -189,7 +200,7 @@ Class Book {
          $stmt->execute($data);
          while($r = $stmt->fetch(PDO::FETCH_ASSOC))		//goes through list
          {
-           $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber']);
+           $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber'],$r['wishlist']);
          }
          $errorCode  = 1;
          $message    = $booklist;
@@ -217,7 +228,7 @@ Class Book {
        $stmt->execute($data);
        while($r = $stmt->fetch(PDO::FETCH_ASSOC))		//goes through list
        {
-         $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber']);
+         $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber'],$r['wishlist']);
        }
        $errorCode  = 1;
        $message    = $booklist;
@@ -244,7 +255,7 @@ Class Book {
         $stmt->execute($data);
         while($r = $stmt->fetch(PDO::FETCH_ASSOC))		//goes through list
         {
-          $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber']);;
+          $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber'],$r['wishlist']);;
         }
         $errorCode  = 1;
         $message    = $booklist;
@@ -256,51 +267,171 @@ Class Book {
       }
       return array($errorCode, $message);
    }
-  //=================================================================================== CREATE
-    public static function associateWithAuthor($bookID, $authorID)
+   //===================================================================================
+    public static function getByWishlist()
     {
+       $errorCode;
+       $message;
+       $db = Db::getInstance();
+       $sql = "SELECT * FROM book WHERE wishlist = 1";
+       $data = array($seriesID);
+       $booklist = array();
+       try
+       {
+         $stmt = $db->prepare($sql);
+         $stmt->execute($data);
+         while($r = $stmt->fetch(PDO::FETCH_ASSOC))
+         {
+           $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber'],$r['wishlist']);
+         }
+         $errorCode  = 1;
+         $message    = $booklist;
+       }
+       catch(PDOException $e)
+       {
+         $errorCode  = $e->getCode();
+         $message    = $e->getMessage();
+       }
+       return array($errorCode, $message);
+    }
+  //===================================================================================
+   public static function checkifWithAuthor($bookID, $authorID)
+   {
+
       $errorCode;
       $message;
       $db = Db::getInstance();
-      $sql = "INSERT INTO book_author (bookID, authorID) VALUES (?,?)";
+      $sql = "SELECT book_authorID FROM book_author WHERE bookID = ? AND authorID = ?";
       $data = array($bookID, $authorID);
+      $authorlist = array();
       try
       {
         $stmt = $db->prepare($sql);
         $stmt->execute($data);
-        $lastID = $db->lastInsertId();
-        $errorCode = 1;
-        $message = $lastID;
+        $r = $stmt->fetch(PDO::FETCH_ASSOC);
+        $errorCode  = 1;
+        $message    = $r['book_authorID'];
       }
       catch(PDOException $e)
       {
-        $errorCode  = $e-> getCode();
+        $errorCode  = $e->getCode();
         $message    = $e->getMessage();
       }
       return array($errorCode, $message);
    }
+     //===================================================================================
+    public static function associateWithAuthor($bookID, $authorID)
+    {
+      $errorCode;
+      $message;
+      $check = Book::checkifWithAuthor($bookID, $authorID)[1];
+      if($check > -1)
+      {
+        $message = $check;
+        $errorCode = 1;
+      }
+      else
+      {
+        $db = Db::getInstance();
+        $sql = "INSERT INTO book_author (bookID, authorID) VALUES (?,?)";
+        $data = array($bookID, $authorID);
+        try
+        {
+          $stmt = $db->prepare($sql);
+          $stmt->execute($data);
+          $lastID = $db->lastInsertId();
+          $errorCode = 1;
+          $message = $lastID;
+        }
+        catch(PDOException $e)
+        {
+          $errorCode  = $e-> getCode();
+          $message    = $e->getMessage();
+        }
+      }
+      return array($errorCode, $message);
+   }
+   //===================================================================================
+    public static function checkIfInSeries($bookID, $seriesID)
+    {
+
+       $errorCode;
+       $message;
+       $db = Db::getInstance();
+       $sql = "SELECT book_seriesID FROM book_series WHERE bookID = ? AND seriesID = ?";
+       $data = array($bookID, $seriesID);
+       $authorlist = array();
+       try
+       {
+         $stmt = $db->prepare($sql);
+         $stmt->execute($data);
+         $r = $stmt->fetch(PDO::FETCH_ASSOC);
+         $errorCode  = 1;
+         $message    = $r['book_seriesID'];
+       }
+       catch(PDOException $e)
+       {
+         $errorCode  = $e->getCode();
+         $message    = $e->getMessage();
+       }
+       return array($errorCode, $message);
+    }
    //=================================================================================== CREATE
      public static function associateWithSeries($bookID, $seriesID)
      {
        $errorCode;
        $message;
-       $db = Db::getInstance();
-       $sql = "INSERT INTO book_series (bookID, seriesID) VALUES (?,?)";
-       $data = array($bookID, $seriesID);
-       try
+       $check = Book::checkIfInSeries($bookID, $seriesID)[1];
+       if($check > -1)
        {
-         $stmt = $db->prepare($sql);
-         $stmt->execute($data);
-         $lastID = $db->lastInsertId();
+         $message = $check;
          $errorCode = 1;
-         $message = $lastID;
        }
-       catch(PDOException $e)
+       else
        {
-         $errorCode  = $e-> getCode();
-         $message    = $e->getMessage();
+         $db = Db::getInstance();
+         $sql = "INSERT INTO book_series (bookID, seriesID) VALUES (?,?)";
+         $data = array($bookID, $seriesID);
+         try
+         {
+           $stmt = $db->prepare($sql);
+           $stmt->execute($data);
+           $lastID = $db->lastInsertId();
+           $errorCode = 1;
+           $message = $lastID;
+         }
+         catch(PDOException $e)
+         {
+           $errorCode  = $e-> getCode();
+           $message    = $e->getMessage();
+         }
        }
        return array($errorCode, $message);
     }
+    //===================================================================================
+     public static function checkIfExists($title)
+     {
+
+        $errorCode;
+        $message;
+        $db = Db::getInstance();
+        $sql = "SELECT bookID FROM book WHERE UPPER(title) = UPPER(?)";
+        $data = array($title);
+        $authorlist = array();
+        try
+        {
+          $stmt = $db->prepare($sql);
+          $stmt->execute($data);
+          $r = $stmt->fetch(PDO::FETCH_ASSOC);
+          $errorCode  = 1;
+          $message    = $r['bookID'];
+        }
+        catch(PDOException $e)
+        {
+          $errorCode  = $e->getCode();
+          $message    = $e->getMessage();
+        }
+        return array($errorCode, $message);
+     }
 }
 ?>

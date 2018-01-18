@@ -65,7 +65,7 @@ Class BrowseController
     $authorID = $_GET['id'];
     $searchBy = 'author';
     $author = Author::id($authorID)[1];
-    $searchByText = $author->lastName.", ".$author->firstName." ".$author->middleName;
+    $searchByText = $author->name;
     $list = Book::getByAuthorID($authorID)[1];
     $listSize = sizeof($list);
     require_once('views/browse/bookResults.php');

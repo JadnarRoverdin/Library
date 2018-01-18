@@ -3,7 +3,7 @@ function changenumofAuthor(event)
 {
   var num = event.target.value;
   var authorholder = document.getElementById('authorNames');
-  var form = "<input type='text' placeholder='First Name'   name='firstName[]'><input type='text' placeholder='Middle Name'  name='middleName[]'><input type='text' placeholder='Last Name'    name='lastName[]'><br>"
+  var form = "<input type='text' placeholder='Last, First M.I.' name='name[]'><br>"
   var formout = "";
   for(var i=0; i<num; i++)
   {
