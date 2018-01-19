@@ -322,12 +322,11 @@ Class Book {
        $message;
        $db = Db::getInstance();
        $sql = "SELECT * FROM book WHERE wishlist = 1";
-       $data = array($seriesID);
        $booklist = array();
        try
        {
          $stmt = $db->prepare($sql);
-         $stmt->execute($data);
+         $stmt->execute();
          while($r = $stmt->fetch(PDO::FETCH_ASSOC))
          {
            $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber'],$r['wishlist']);
