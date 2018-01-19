@@ -18,7 +18,7 @@
     <p><a href='?controller=browse&action=browse&searchBy=title&target=A&refresh=1'>Browse by Title</a></p>
     <p><a href='?controller=browse&action=browse&searchBy=author&target=A'>Browse by Author</a></p>
     <p><a href='?controller=browse&action=browse&searchBy=series&target=A'>Browse by Series</a></p>
-    <p><a href='?controller=browse$action=browse&searchBy=wishlist'>Browse by Wishlist</a></p>
+    <p><a href='?controller=browse&action=browse&searchBy=wishlist'>Browse by Wishlist</a></p>
   </div>
   <hr>
   <div>
