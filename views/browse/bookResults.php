@@ -1,10 +1,10 @@
-
+<a href="<?php echo $_SERVER['HTTP_REFERER']; ?>">Back</a>
 <h2>Browsing <?php echo $searchByText; ?></h2>
 <div>
-  <form action='?controller=browse&action=browse&searchBy=<?php echo $searchBy;?>' method='post'>
+  <form action='?controller=browse&action=browse&searchBy=<?php echo $searchBy;?>' method='get'>
     <?php if(isset($_SESSION['return']))
             {
-              echo "<a href='?".$_SESSION['return']."'>Back</a>";
+              echo "<a href='".$_SERVER['HTTP_REFERER']."'>Back</a>";
               unset($_SESSION['return']);
             }
     if($selectActive)
@@ -31,7 +31,7 @@ if(isset($listSize) && $listSize > 0)
     for($i = 0; $i < sizeof($list); $i++)
     {
       echo "<div class='bookresult'>
-              <strong>".$list[$i]->title."</strong><hr>
+              <a href='?controller=pages&action=viewbook&bookID=".$list[$i]->id."'><strong>".$list[$i]->title."</strong></a><hr>
 
               Author(s): ";
               foreach($list[$i]->authors as $a)

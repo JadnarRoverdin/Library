@@ -1,4 +1,4 @@
-
+<a href="<?php echo $_SERVER['HTTP_REFERER']; ?>">Back</a>
 <h2>Browsing by <?php echo $searchBy; ?></h2>
 <div>
   <form action='?controller=browse&action=browse&searchBy=author' method='post'>

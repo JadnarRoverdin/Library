@@ -26,8 +26,8 @@
     $controller->{$action}();
   }
 
-  $controllers = array (  'pages'     => ['home', 'index'],
-                          'admin'     => ['addBook', 'addAuthor', 'autoadder'],
+  $controllers = array (  'pages'     => ['home', 'index', 'viewbook'],
+                          'admin'     => ['addBook', 'addAuthor', 'autoadder', 'editBook'],
                           'search'    => ['search'],
                           'browse'    => ['browse','browseByAuthor', 'browseBySeries']);
 

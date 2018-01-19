@@ -5,12 +5,15 @@ echo "<div class='resultsContainer'>";
 for($i = 0; $i < sizeof($booklist); $i++)
 {
   echo "<div class='result'>
-          <strong>".$booklist[$i]->title."</strong><br>
+          <a href='?controller=pages&action=viewbook&bookID=".$booklist[$i]->id."'><strong>".$booklist[$i]->title."</strong></a><br>
 
           Author(s): ";
-          foreach($booklist[$i]->authors as $a)
+          $authors = $booklist[$i]->authors;
+          for($j=0; $j < sizeof($authors); $j++)
           {
-            echo $a->name.",";
+            echo $authors[$j]->name;
+            if($j < sizeof($authors)-1)
+              echo "; ";
           }
           if($booklist[$i]->bookNumber > 0)
             echo "<br>Book ".$booklist[$i]->bookNumber." of ".$booklist[$i]->series->name;

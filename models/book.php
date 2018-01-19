@@ -50,6 +50,30 @@ Class Book {
     }
     return array($errorCode, $message);
  }
+ //=================================================================================== CREATE
+   public static function update($title, $ISBN, $bookNumber, $wishlist, $bookID)
+   {
+     $errorCode;
+     $message;
+     $db = Db::getInstance();
+     $sql = "UPDATE book SET title = ?, ISBN = ?, bookNumber = ?, wishlist = ? WHERE bookID = ?";
+     $data = array($title, $ISBN, $bookNumber, $wishlist, $bookID);
+     try
+     {
+       $stmt = $db->prepare($sql);
+       $stmt->execute($data);
+       $lastID = $db->lastInsertId();
+       $errorCode = 1;
+       $message = $lastID;
+     }
+     catch(PDOException $e)
+     {
+       $errorCode  = $e-> getCode();
+       $message    = $e->getMessage();
+     }
+
+     return array($errorCode, $message);
+  }
  //===================================================================================
   public static function all()
   {
@@ -104,6 +128,29 @@ Class Book {
       }
       return array($errorCode, $message);
    }
+   //===================================================================================
+    public static function id($id)
+    {
+       $errorCode;
+       $message;
+       $db = Db::getInstance();
+       $sql = "SELECT DISTINCT * FROM book WHERE bookID = ?";
+       $data = array($id);
+       try
+       {
+         $stmt = $db->prepare($sql);
+         $stmt->execute($data);
+         $r = $stmt->fetch(PDO::FETCH_ASSOC);
+         $errorCode  = 1;
+         $message    = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber'],$r['wishlist']);
+       }
+       catch(PDOException $e)
+       {
+         $errorCode  = $e->getCode();
+         $message    = $e->getMessage();
+       }
+       return array($errorCode, $message);
+    }
  //===================================================================================
   public static function searchByTitle($searchString)
   {
@@ -164,8 +211,8 @@ Class Book {
       $errorCode;
       $message;
       $db = Db::getInstance();
-      $sql = "SELECT * FROM book WHERE bookID IN(SELECT bookID FROM book_author WHERE book_author.authorID IN (SELECT DISTINCT authorID FROM author WHERE UPPER(author.firstName) LIKE UPPER(?) OR UPPER(author.middleName) LIKE UPPER(?) OR UPPER(author.lastName) LIKE UPPER(?)))";
-      $data = array('%'.$searchString.'%','%'.$searchString.'%','%'.$searchString.'%');
+      $sql = "SELECT * FROM book WHERE bookID IN(SELECT bookID FROM book_author WHERE book_author.authorID IN (SELECT DISTINCT authorID FROM author WHERE UPPER(name) LIKE UPPER(?)))";
+      $data = array('%'.$searchString.'%');
       $booklist = array();
       try
       {
@@ -352,6 +399,30 @@ Class Book {
       return array($errorCode, $message);
    }
    //===================================================================================
+  public static function disassociateWithAuthor($bookID, $authorID)
+  {
+    $errorCode;
+    $message;
+    $db = Db::getInstance();
+    $sql = "DELETE FROM book_author WHERE bookID = ? AND authorID = ?";
+    $data = array($bookID, $authorID);
+    try
+    {
+      $stmt = $db->prepare($sql);
+      $stmt->execute($data);
+      $lastID = $db->lastInsertId();
+      $errorCode = 1;
+      $message = $lastID;
+    }
+    catch(PDOException $e)
+    {
+      $errorCode  = $e-> getCode();
+      $message    = $e->getMessage();
+    }
+
+    return array($errorCode, $message);
+ }
+   //===================================================================================
     public static function checkIfInSeries($bookID, $seriesID)
     {
 
@@ -408,6 +479,32 @@ Class Book {
        }
        return array($errorCode, $message);
     }
+    //=================================================================================== CREATE
+      public static function disassociateWithSeries($bookID, $seriesID)
+      {
+        $errorCode;
+        $message;
+
+        $db = Db::getInstance();
+        $sql = "DELETE FROM book_series WHERE bookID = ? AND seriesID = ?";
+        $data = array($bookID, $seriesID);
+        try
+        {
+          $stmt = $db->prepare($sql);
+          $stmt->execute($data);
+          $lastID = $db->lastInsertId();
+          $errorCode = 1;
+          $message = $lastID;
+        }
+        catch(PDOException $e)
+        {
+          $errorCode  = $e-> getCode();
+          $message    = $e->getMessage();
+        }
+
+        return array($errorCode, $message);
+     }
+
     //===================================================================================
      public static function checkIfExists($title)
      {

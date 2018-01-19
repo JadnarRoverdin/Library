@@ -8,7 +8,6 @@ Class BrowseController
     $target;
     $list;
     $listSize;
-    $return = "";
     $selectActive = true;
     switch($searchBy)
     {
@@ -19,7 +18,6 @@ Class BrowseController
           $target = $_POST['target'];
         if(isset($_GET['target']))
           $target = $_GET['target'];
-        echo $return;
         $list = Book::byLetter($target)[1];
         $listSize = sizeof($list);
         require_once('views/browse/bookResults.php');
@@ -31,7 +29,6 @@ Class BrowseController
           $target = $_GET['target'];
         $list = Author::byLetter($target)[1];
         $listSize = sizeof($list);
-        $_SESSION['return'] = $_SERVER['QUERY_STRING']."&target=".$target;
         require_once('views/browse/authorResults.php');
         break;
       case 'series':
@@ -41,7 +38,6 @@ Class BrowseController
           $target = $_GET['target'];
         $list = Series::byLetter($target)[1];
         $listSize = sizeof($list);
-        $_SESSION['return'] = $_SERVER['QUERY_STRING']."&target=".$target;
         require_once('views/browse/seriesResults.php');
         break;
     }

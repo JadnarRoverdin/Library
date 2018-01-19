@@ -64,6 +64,13 @@ a
   width:100%;
 }
 
+#currentAuthorNames
+{
+  border: 1px solid black;
+  width: 50%;
+  margin: 0 auto;
+}
+
 
 iframe
 {
@@ -100,6 +107,26 @@ iframe
   margin: auto;
   margin-bottom: 10px;
   width:80%;
+}
+
+.bookDetails
+{
+  text-align:center;
+  width: 80%;
+  margin:0 auto;
+}
+
+.bookAuthor
+{
+
+}
+.bookSeries
+{
+
+}
+.bookOther
+{
+
 }
 
 .letterselect

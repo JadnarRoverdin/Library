@@ -98,7 +98,7 @@ Class Author {
      $db = Db::getInstance();
      $sql = "SELECT * FROM author WHERE name LIKE ? ORDER BY name";
      $list = array();
-     $data = array("%".$a."%");
+     $data = array($a."%");
      try
      {
        $stmt = $db->prepare($sql);

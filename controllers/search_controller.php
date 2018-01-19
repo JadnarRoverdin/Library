@@ -3,8 +3,18 @@ Class SearchController
 {
   public function search()
   {
-    $string = $_POST['searchString'];
-    $searchBy = $_POST['searchBy'];
+    $string;
+    $searchBy;
+    if(isset($_POST['searchString']))
+    {
+      $string = $_POST['searchString'];
+      $searchBy = $_POST['searchBy'];
+    }
+    else
+    {
+      $string = $_GET['searchString'];
+      $searchBy = $_GET['searchBy'];
+    }
     $booklist;
     switch($searchBy)
     {
