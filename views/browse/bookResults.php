@@ -30,7 +30,10 @@ if(isset($listSize) && $listSize > 0)
 {
     for($i = 0; $i < sizeof($list); $i++)
     {
-      echo "<div class='bookresult'>
+      $wishlist ="";
+      if($list[$i]->wishlist == "1")
+        $wishlist ="wishlist";
+      echo "<div class='result ".$wishlist."'>
               <a href='?controller=pages&action=viewbook&bookID=".$list[$i]->id."'><strong>".$list[$i]->title."</strong></a><hr>
 
               Author(s): ";
