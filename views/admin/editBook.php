@@ -6,7 +6,7 @@
 
   <input type='hidden' name='bookID' value='<?php echo $book->id?>'>
   <input type='text' placeholder='Title' name='title' value="<?php echo $book->title;?>">
-  <input type='hidden' placeholder='ISBN#' name='ISBN' value='value='<?php echo $book->ISBN?>''>
+  <input type='hidden' placeholder='ISBN#' name='ISBN' value='<?php echo $book->ISBN;?>'>
   <hr>
   <h3>Author(s)</h3>
   Number of Authors: <input type='number' list='authors' id = 'numOfAuthor' value='<?php echo sizeof($book->authors);?>' oninput='changenumofAuthor(event)'>
