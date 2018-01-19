@@ -28,6 +28,11 @@ h1
   font-size:50px;
 }
 
+.wishlist
+{
+  background-color:yellow;
+}
+
 a.title
 {
   border: 0 solid black;

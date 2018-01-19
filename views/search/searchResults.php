@@ -4,7 +4,10 @@ echo "Searching $searchBy's for '$string' yielded ".sizeof($booklist)." results.
 echo "<div class='resultsContainer'>";
 for($i = 0; $i < sizeof($booklist); $i++)
 {
-  echo "<div class='result'>
+  $wishlist ="";
+  if($booklist[$i]->wishlist = "1")
+    $wishlist ="wishlist";
+  echo "<div class='result ".$wishlist."'>
           <a href='?controller=pages&action=viewbook&bookID=".$booklist[$i]->id."'><strong>".$booklist[$i]->title."</strong></a><br>
 
           Author(s): ";
