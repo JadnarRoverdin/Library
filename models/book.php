@@ -151,6 +151,33 @@ Class Book {
        }
        return array($errorCode, $message);
     }
+    //===================================================================================
+     public static function getByWishlist()
+     {
+        $errorCode;
+        $message;
+        $db = Db::getInstance();
+        $sql = "SELECT * FROM book WHERE wishlist = 1";
+        $data = array($id);
+        $booklist = array();
+        try
+        {
+          $stmt = $db->prepare($sql);
+          $stmt->execute($data);
+          while($r = $stmt->fetch(PDO::FETCH_ASSOC))		//goes through list
+          {
+            $booklist[] = new Book($r['bookID'],$r['title'],$r['ISBN'],$r['bookNumber'],$r['wishlist']);
+          }
+          $errorCode  = 1;
+          $message    = $booklist;
+        }
+        catch(PDOException $e)
+        {
+          $errorCode  = $e->getCode();
+          $message    = $e->getMessage();
+        }
+        return array($errorCode, $message);
+     }
  //===================================================================================
   public static function searchByTitle($searchString)
   {

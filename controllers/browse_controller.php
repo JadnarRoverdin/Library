@@ -40,6 +40,11 @@ Class BrowseController
         $listSize = sizeof($list);
         require_once('views/browse/seriesResults.php');
         break;
+      case 'wishlist':
+        $list = Book::getByWishlist()[1];
+        $listSize = sizeof($list);
+        require_once('views/browse/bookResults.php');
+        break;
     }
   }
 
