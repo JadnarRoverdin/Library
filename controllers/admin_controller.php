@@ -72,7 +72,9 @@ Class AdminController
     {
       $bookNumber = $_POST['bookNumber'];
       $bookID = $_POST['bookID'];
-      echo $_POST['wishlist'];
+      $wishlist = $_POST['wishlist'];
+      $title = $_POST['title'];
+      $ISBN = $_POST['ISBN'];
       if(isset($_POST['remove']))
         foreach($_POST['remove'] as $r)
         {
@@ -100,7 +102,7 @@ Class AdminController
         $seriesID = Series::create($_POST['seriesName'])[1];
         Book::associateWithSeries($bookID, $seriesID);
       }
-      Book::update($_POST['title'],$_POST['ISBN'],$bookNumber,$_POST['wishlist'],$bookID);
+      Book::update($title,$ISBN,$bookNumber,$wishlist,$bookID);
       $message = "Book has been updated.";
     }
     $bookID = $_GET['id'];
