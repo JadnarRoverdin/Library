@@ -72,6 +72,7 @@ Class AdminController
     {
       $bookNumber = $_POST['bookNumber'];
       $bookID = $_POST['bookID'];
+      echo $_POST['wishlist'];
       if(isset($_POST['remove']))
         foreach($_POST['remove'] as $r)
         {
