@@ -5,7 +5,7 @@ echo "<div class='resultsContainer'>";
 for($i = 0; $i < sizeof($booklist); $i++)
 {
   $wishlist ="";
-  if($booklist[$i]->wishlist = "1")
+  if($booklist[$i]->wishlist == "1")
     $wishlist ="wishlist";
   echo "<div class='result ".$wishlist."'>
           <a href='?controller=pages&action=viewbook&bookID=".$booklist[$i]->id."'><strong>".$booklist[$i]->title."</strong></a><br>
